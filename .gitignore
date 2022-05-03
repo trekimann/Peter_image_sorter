@@ -7,6 +7,10 @@
 *.heic
 Example_Image_To_Sort/
 
+# vs code
+.vs/
+.vscode/
+
 # User-specific files
 *.rsuser
 *.suo
