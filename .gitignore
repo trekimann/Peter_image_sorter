@@ -3,6 +3,10 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# Example Files
+*.heic
+Example_Image_To_Sort/
+
 # User-specific files
 *.rsuser
 *.suo
