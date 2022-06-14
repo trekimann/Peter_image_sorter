@@ -21,8 +21,8 @@ namespace Peter_image_sorter
 
     public class Program
     {
-        private static Regex r = new Regex(":");
-        public static string LaunchLocation;
+        private static readonly Regex r = new(":");
+        private static string LaunchLocation;
         static void Main(string[] args)
         {
             try
@@ -63,7 +63,7 @@ namespace Peter_image_sorter
                                 quit = true;
                                 break;
                             case "5":
-                                debugDate();
+                                DebugDate();
                                 break;
                             default:
                                 Console.WriteLine("selection not recognised");
@@ -127,7 +127,7 @@ namespace Peter_image_sorter
             // Find the date, use filename for now but maybe metadata later?
             var FileName = Path.GetFileName(FilePath);
 
-            var FileDate = GetDateTaken(FilePath, FileName);
+            var FileDate = GetDateTaken(FilePath);
             if (FileDate.Day != null)
             {            
             var day = FileDate.Day;
@@ -166,7 +166,7 @@ namespace Peter_image_sorter
             }
         }
 
-        public static void debugDate()
+        public static void DebugDate()
         {
             // _2022_06_08_19_46_08.mp4
             Console.WriteLine("Enter example file Name: ");
@@ -181,33 +181,33 @@ namespace Peter_image_sorter
         public static DateObject GetDateFromFileName(string videoLocation)
         {
             // Assuming that the video has a nice date conventaion VID_{YYYYMMDD}_{HHMMSS}.mp4. Could do a regex check?
-            DateObject toReturn = new DateObject();
+            DateObject toReturn = new();
 
             var filename = Path.GetFileName(videoLocation);
 
             // VID_20220103_205223.mp4
-            Regex fileNameFormatPlus9Video = new Regex(@"VID_[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]_[0-9][0-9][0-9][0-9][0-9][0-9]\.mp4");
+            Regex fileNameFormatPlus9Video = new(@"VID_[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]_[0-9][0-9][0-9][0-9][0-9][0-9]\.mp4");
             
             // 20220102_191014.mp4
-            Regex fileNameFormatS21Video = new Regex(@"[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]_(.*)\.mp4");
+            Regex fileNameFormatS21Video = new(@"[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]_(.*)\.mp4");
             
             // VID20220126210857.mp4
-            Regex fileNameFormatPlus9Pro_2 = new Regex(@"VID[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]\.mp4");
+            Regex fileNameFormatPlus9Pro_2 = new(@"VID[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]\.mp4");
 
             // VID-20211111-WA0008.mp4
-            Regex fileNameFormat_wa = new Regex(@"VID-[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]-WA(.*)\.mp4");
+            Regex fileNameFormat_wa = new(@"VID-[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]-WA(.*)\.mp4");
 
             // 20211114_190938.heic
-            Regex fileNameFormat_heic_s21 = new Regex(@"[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]_(.*)\.heic");
+            Regex fileNameFormat_heic_s21 = new(@"[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]_(.*)\.heic");
 
             // IMG20220122112747.heic
-            Regex fileNameFormat_heic_9pro = new Regex(@"IMG[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]\.heic");
+            Regex fileNameFormat_heic_9pro = new(@"IMG[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]\.heic");
 
             // _2022_06_08_19_46_08.mp4
-            Regex fileNameFormatEufyDirectOnPhone = new Regex(@"^_[0-9][0-9][0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]\.mp4");
+            Regex fileNameFormatEufyDirectOnPhone = new(@"^_[0-9][0-9][0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]\.mp4");
 
             // _2022_06_08_19_46_08.mp4
-            Regex fileNameFormatEufyRecordFromDevice = new Regex(@"_[A-Za-z]*_[0-9][0-9][0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]\.mp4");
+            Regex fileNameFormatEufyRecordFromDevice = new(@"_[A-Za-z]*_[0-9][0-9][0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]\.mp4");
 
             if (fileNameFormatPlus9Video.IsMatch(filename))
             {
@@ -287,15 +287,15 @@ namespace Peter_image_sorter
             }
             else
             {
-                Console.WriteLine("Video file name did not match the requirements");
+                Console.WriteLine("File name did not match the requirements");
             }
             return toReturn;
         }
 
-        public static DateObject GetDateTaken(string imageLocation, string fileName)
+        public static DateObject GetDateTaken(string imageLocation)
         {
             var toReturn = new DateObject();
-            FileStream fs = new FileStream(imageLocation, FileMode.Open, FileAccess.Read);
+            FileStream fs = new(imageLocation, FileMode.Open, FileAccess.Read);
             try
             {
                 if (IsImage(fs))
@@ -351,7 +351,7 @@ namespace Peter_image_sorter
                                         toReturn.Year= DateArray[0];
 
                                     } catch (Exception ex)
-                                    {}
+                                    { Console.WriteLine(ex.ToString()); }
                                 }
                             }
                         }
@@ -411,13 +411,13 @@ namespace Peter_image_sorter
         {
             stream.Seek(0, SeekOrigin.Begin);
 
-            List<string> jpg = new List<string> { "FF", "D8" };
-            List<string> bmp = new List<string> { "42", "4D" };
-            List<string> gif = new List<string> { "47", "49", "46" };
-            List<string> png = new List<string> { "89", "50", "4E", "47", "0D", "0A", "1A", "0A" };
-            List<List<string>> imgTypes = new List<List<string>> { jpg, bmp, gif, png };
+            List<string> jpg = new() { "FF", "D8" };
+            List<string> bmp = new(){ "42", "4D" };
+            List<string> gif = new(){ "47", "49", "46" };
+            List<string> png = new(){ "89", "50", "4E", "47", "0D", "0A", "1A", "0A" };
+            List<List<string>> imgTypes = new(){ jpg, bmp, gif, png };
 
-            List<string> bytesIterated = new List<string>();
+            List<string> bytesIterated = new();
 
             for (int i = 0; i < 8; i++)
             {

@@ -6,13 +6,20 @@ namespace TestProject1
     [TestClass]
     public class UnitTest1
     {
+        DateObject expected;
+
+        [TestInitialize]
+        public void TestInitialise()
+        {
+            expected = new();
+        }
+
         [TestMethod]
         public void DateExtractFromFilenameWorksWith_s21Heic()
         {
             // setup
             string fileName = "20211114_190938.heic";
 
-            DateObject expected = new DateObject();
             expected.Day = "14";
             expected.Month = "11";
             expected.Year = "2021";
@@ -21,7 +28,7 @@ namespace TestProject1
             var actual = Peter_image_sorter.Program.GetDateFromFileName(fileName);
 
             // assert
-            datesMatch(expected, actual);
+            DatesMatch(expected, actual);
         }
 
         [TestMethod]
@@ -29,8 +36,7 @@ namespace TestProject1
         {
             // setup
             string fileName = "VID-20211112-WA0008.mp4";
-
-            DateObject expected = new DateObject();
+            
             expected.Day = "12";
             expected.Month = "11";
             expected.Year = "2021";
@@ -39,7 +45,7 @@ namespace TestProject1
             var actual = Peter_image_sorter.Program.GetDateFromFileName(fileName);
 
             // assert
-            datesMatch(expected, actual);
+            DatesMatch(expected, actual);
         }
 
         [TestMethod]
@@ -47,8 +53,7 @@ namespace TestProject1
         {
             // setup
             string fileName = "IMG20220122112747.heic";
-
-            DateObject expected = new DateObject();
+            
             expected.Day = "22";
             expected.Month = "01";
             expected.Year = "2022";
@@ -57,7 +62,7 @@ namespace TestProject1
             var actual = Peter_image_sorter.Program.GetDateFromFileName(fileName);
 
             // assert
-            datesMatch(expected, actual);
+            DatesMatch(expected, actual);
         }
 
         [TestMethod]
@@ -66,7 +71,7 @@ namespace TestProject1
             // setup
             string fileName = "_2022_06_08_19_46_08.mp4";
 
-            DateObject expected = new DateObject();
+            
             expected.Day = "08";
             expected.Month = "06";
             expected.Year = "2022";
@@ -75,7 +80,7 @@ namespace TestProject1
             var actual = Peter_image_sorter.Program.GetDateFromFileName(fileName);
 
             // assert
-            datesMatch(expected, actual);
+            DatesMatch(expected, actual);
         }
 
         [TestMethod]
@@ -84,7 +89,7 @@ namespace TestProject1
             // setup
             string fileName = "VID_20220103_205223.mp4";
 
-            DateObject expected = new DateObject();
+            
             expected.Day = "03";
             expected.Month = "01";
             expected.Year = "2022";
@@ -93,7 +98,7 @@ namespace TestProject1
             var actual = Peter_image_sorter.Program.GetDateFromFileName(fileName);
 
             // assert
-            datesMatch(expected, actual);
+            DatesMatch(expected, actual);
         }
 
         [TestMethod]
@@ -102,7 +107,7 @@ namespace TestProject1
             // setup
             string fileName = "20220102_191014.mp4";
 
-            DateObject expected = new DateObject();
+            
             expected.Day = "02";
             expected.Month = "01";
             expected.Year = "2022";
@@ -111,7 +116,7 @@ namespace TestProject1
             var actual = Peter_image_sorter.Program.GetDateFromFileName(fileName);
 
             // assert
-            datesMatch(expected, actual);
+            DatesMatch(expected, actual);
         }
 
         [TestMethod]
@@ -120,7 +125,7 @@ namespace TestProject1
             // setup
             string fileName = "VID20220126210857.mp4";
 
-            DateObject expected = new DateObject();
+            
             expected.Day = "26";
             expected.Month = "01";
             expected.Year = "2022";
@@ -129,7 +134,7 @@ namespace TestProject1
             var actual = Peter_image_sorter.Program.GetDateFromFileName(fileName);
 
             // assert
-            datesMatch(expected, actual);
+            DatesMatch(expected, actual);
         }
 
         [TestMethod]
@@ -138,7 +143,7 @@ namespace TestProject1
             // setup
             string fileName = "_PeterCamera_2022_05_15_09_26_49.mp4";
 
-            DateObject expected = new DateObject();
+            
             expected.Day = "15";
             expected.Month = "05";
             expected.Year = "2022";
@@ -147,7 +152,7 @@ namespace TestProject1
             var actual = Peter_image_sorter.Program.GetDateFromFileName(fileName);
 
             // assert
-            datesMatch(expected, actual);
+            DatesMatch(expected, actual);
         }
 
         [TestMethod]
@@ -156,7 +161,7 @@ namespace TestProject1
             // setup
             string fileName = "_Backyard_2022_05_11_16_14_01.mp4";
 
-            DateObject expected = new DateObject();
+            
             expected.Day = "11";
             expected.Month = "05";
             expected.Year = "2022";
@@ -165,9 +170,9 @@ namespace TestProject1
             var actual = Peter_image_sorter.Program.GetDateFromFileName(fileName);
 
             // assert
-            datesMatch(expected, actual);
+            DatesMatch(expected, actual);
         }
-        private void datesMatch(DateObject expected, DateObject actual)
+        private static void DatesMatch(DateObject expected, DateObject actual)
         {
             // assert that the day, month and year match what they should be
             Assert.AreEqual(expected.Day, actual.Day);
