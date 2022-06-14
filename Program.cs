@@ -204,7 +204,10 @@ namespace Peter_image_sorter
             Regex fileNameFormat_heic_9pro = new Regex(@"IMG[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]\.heic");
 
             // _2022_06_08_19_46_08.mp4
-            Regex fileNameFormatEufy = new Regex(@"_[0-9][0-9][0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]\.mp4");
+            Regex fileNameFormatEufyDirectOnPhone = new Regex(@"^_[0-9][0-9][0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]\.mp4");
+
+            // _2022_06_08_19_46_08.mp4
+            Regex fileNameFormatEufyRecordFromDevice = new Regex(@"_[A-Za-z]*_[0-9][0-9][0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]\.mp4");
 
             if (fileNameFormatPlus9Video.IsMatch(filename))
             {
@@ -266,13 +269,21 @@ namespace Peter_image_sorter
                 toReturn.Day = dateBit[6..8];
 
             }
-            else if (fileNameFormatEufy.IsMatch(filename))
+            else if (fileNameFormatEufyDirectOnPhone.IsMatch(filename))
             {
                 var titleArray = filename.Split("_");
                 Console.WriteLine(titleArray);
                 toReturn.Day = titleArray[3];
                 toReturn.Month = titleArray[2];
                 toReturn.Year = titleArray[1];
+            }
+            else if (fileNameFormatEufyRecordFromDevice.IsMatch(filename))
+            {
+                var titleArray = filename.Split("_");
+                Console.WriteLine(titleArray);
+                toReturn.Day = titleArray[4];
+                toReturn.Month = titleArray[3];
+                toReturn.Year = titleArray[2];
             }
             else
             {

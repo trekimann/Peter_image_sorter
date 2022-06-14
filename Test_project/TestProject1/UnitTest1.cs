@@ -131,6 +131,42 @@ namespace TestProject1
             // assert
             datesMatch(expected, actual);
         }
+
+        [TestMethod]
+        public void DateExtractFromFilenameWorksWith_EufyFromDevice_PeterCamera()
+        {
+            // setup
+            string fileName = "_PeterCamera_2022_05_15_09_26_49.mp4";
+
+            DateObject expected = new DateObject();
+            expected.Day = "15";
+            expected.Month = "05";
+            expected.Year = "2022";
+
+            // action
+            var actual = Peter_image_sorter.Program.GetDateFromFileName(fileName);
+
+            // assert
+            datesMatch(expected, actual);
+        }
+
+        [TestMethod]
+        public void DateExtractFromFilenameWorksWith_EufyFromDevice_BackYard()
+        {
+            // setup
+            string fileName = "_Backyard_2022_05_11_16_14_01.mp4";
+
+            DateObject expected = new DateObject();
+            expected.Day = "11";
+            expected.Month = "05";
+            expected.Year = "2022";
+
+            // action
+            var actual = Peter_image_sorter.Program.GetDateFromFileName(fileName);
+
+            // assert
+            datesMatch(expected, actual);
+        }
         private void datesMatch(DateObject expected, DateObject actual)
         {
             // assert that the day, month and year match what they should be
