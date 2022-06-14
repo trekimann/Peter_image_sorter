@@ -11,7 +11,15 @@ using System.Text.RegularExpressions;
 
 namespace Peter_image_sorter
 {
-    class Program
+
+    public class DateObject
+    {
+        public string Year;
+        public string Month;
+        public string Day;
+    }
+
+    public class Program
     {
         private static Regex r = new Regex(":");
         public static string LaunchLocation;
@@ -34,6 +42,7 @@ namespace Peter_image_sorter
                         Console.WriteLine("2. Sort all files in a folder into dated files");
                         Console.WriteLine("3. Sort a single file");
                         Console.WriteLine("4. Close Application");
+                        Console.WriteLine("5. Debug File regex");
                         var choice = Console.ReadLine();
                         switch (choice)
                         {
@@ -52,6 +61,9 @@ namespace Peter_image_sorter
                                 break;
                             case "4":
                                 quit = true;
+                                break;
+                            case "5":
+                                debugDate();
                                 break;
                             default:
                                 Console.WriteLine("selection not recognised");
@@ -116,11 +128,11 @@ namespace Peter_image_sorter
             var FileName = Path.GetFileName(FilePath);
 
             var FileDate = GetDateTaken(FilePath, FileName);
-            if (FileDate[0] != null)
+            if (FileDate.Day != null)
             {            
-            var day = FileDate[0];
-            var month = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(Int32.Parse(FileDate[1]));
-            var year = FileDate[2];
+            var day = FileDate.Day;
+            var month = CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(Int32.Parse(FileDate.Month));
+            var year = FileDate.Year;
 
             // with the date, move the file to the right directory
             var NewDestination = year + "\\" + month + "\\" + day + "\\" + FileName;
@@ -154,32 +166,74 @@ namespace Peter_image_sorter
             }
         }
 
-        public static string[] GetVideoDateRecorded(string videoLocation)
+        public static void debugDate()
+        {
+            // _2022_06_08_19_46_08.mp4
+            Console.WriteLine("Enter example file Name: ");
+            String fileName = Console.ReadLine();
+            DateObject extractedDate = GetDateFromFileName(fileName);
+            Console.WriteLine("Extracted date is:");
+            Console.WriteLine("Year: " + extractedDate.Year);
+            Console.WriteLine("Month: " + extractedDate.Month);
+            Console.WriteLine("Day: " + extractedDate.Day);
+        }
+
+        public static DateObject GetDateFromFileName(string videoLocation)
         {
             // Assuming that the video has a nice date conventaion VID_{YYYYMMDD}_{HHMMSS}.mp4. Could do a regex check?
-            var toReturn = new string[3];
+            DateObject toReturn = new DateObject();
 
             var filename = Path.GetFileName(videoLocation);
-            Regex fileNameFormat1 = new Regex(@"VID_[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]_[0-9][0-9][0-9][0-9][0-9][0-9]\.mp4");
-            Regex fileNameFormat2 = new Regex(@"[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]_(.*)\.mp4");
+
+            // VID_20220103_205223.mp4
+            Regex fileNameFormatPlus9Video = new Regex(@"VID_[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]_[0-9][0-9][0-9][0-9][0-9][0-9]\.mp4");
+            
+            // 20220102_191014.mp4
+            Regex fileNameFormatS21Video = new Regex(@"[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]_(.*)\.mp4");
+            
+            // VID20220126210857.mp4
+            Regex fileNameFormatPlus9Pro_2 = new Regex(@"VID[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]\.mp4");
+
+            // VID-20211111-WA0008.mp4
             Regex fileNameFormat_wa = new Regex(@"VID-[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]-WA(.*)\.mp4");
-            if (fileNameFormat1.IsMatch(filename))
+
+            // 20211114_190938.heic
+            Regex fileNameFormat_heic_s21 = new Regex(@"[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]_(.*)\.heic");
+
+            // IMG20220122112747.heic
+            Regex fileNameFormat_heic_9pro = new Regex(@"IMG[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]\.heic");
+
+            // _2022_06_08_19_46_08.mp4
+            Regex fileNameFormatEufy = new Regex(@"_[0-9][0-9][0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]_[0-9][0-9]\.mp4");
+
+            if (fileNameFormatPlus9Video.IsMatch(filename))
             {
                 var titleArray = filename.Split("_");
                 var dateBit = titleArray[1];
                 Console.WriteLine(dateBit);
-                toReturn[2] = dateBit[0..4];// Day
-                toReturn[1] = dateBit[4..6];// Month
-                toReturn[0] = dateBit[6..8];// Year
+                toReturn.Year = dateBit[0..4];
+                toReturn.Month = dateBit[4..6];
+                toReturn.Day = dateBit[6..8];
             }
-            else if(fileNameFormat2.IsMatch(filename)){
+            else if(fileNameFormatS21Video.IsMatch(filename)){
                 // Other type of file nameing
                 var titleArray = filename.Split("_");
                 var dateBit = titleArray[0];
                 Console.WriteLine(dateBit);
-                toReturn[2] = dateBit[0..4];// Day
-                toReturn[1] = dateBit[4..6];// Month
-                toReturn[0] = dateBit[6..8];// Year
+                toReturn.Year = dateBit[0..4];
+                toReturn.Month = dateBit[4..6];
+                toReturn.Day = dateBit[6..8];
+            }
+            else if (fileNameFormatPlus9Pro_2.IsMatch(filename))
+            {
+                // remove the vid bit
+                var titleArray = filename.Split("VID");
+                var dateBit = titleArray[1];
+                Console.WriteLine(dateBit);
+                toReturn.Year = dateBit[0..4];
+                toReturn.Month = dateBit[4..6];
+                toReturn.Day = dateBit[6..8];
+
             }
             else if (fileNameFormat_wa.IsMatch(filename))
             {
@@ -187,9 +241,38 @@ namespace Peter_image_sorter
                 var titleArray = filename.Split("-");
                 var dateBit = titleArray[1];
                 Console.WriteLine(dateBit);
-                toReturn[2] = dateBit[0..4];// Day
-                toReturn[1] = dateBit[4..6];// Month
-                toReturn[0] = dateBit[6..8];// Year
+                toReturn.Year = dateBit[0..4];
+                toReturn.Month = dateBit[4..6];
+                toReturn.Day = dateBit[6..8];
+            }
+            else if (fileNameFormat_heic_s21.IsMatch(filename))
+            {
+                // Other type of file nameing
+                var titleArray = filename.Split("_");
+                var dateBit = titleArray[0];
+                Console.WriteLine(dateBit);
+                toReturn.Year = dateBit[0..4];
+                toReturn.Month = dateBit[4..6];
+                toReturn.Day = dateBit[6..8];
+            }
+            else if (fileNameFormat_heic_9pro.IsMatch(filename))
+            {
+                // remove the vid bit
+                var titleArray = filename.Split("IMG");
+                var dateBit = titleArray[1];
+                Console.WriteLine(dateBit);
+                toReturn.Year = dateBit[0..4];
+                toReturn.Month = dateBit[4..6];
+                toReturn.Day = dateBit[6..8];
+
+            }
+            else if (fileNameFormatEufy.IsMatch(filename))
+            {
+                var titleArray = filename.Split("_");
+                Console.WriteLine(titleArray);
+                toReturn.Day = titleArray[3];
+                toReturn.Month = titleArray[2];
+                toReturn.Year = titleArray[1];
             }
             else
             {
@@ -198,9 +281,9 @@ namespace Peter_image_sorter
             return toReturn;
         }
 
-        public static string[] GetDateTaken(string imageLocation, string fileName)
+        public static DateObject GetDateTaken(string imageLocation, string fileName)
         {
-            var toReturn = new string[3];
+            var toReturn = new DateObject();
             FileStream fs = new FileStream(imageLocation, FileMode.Open, FileAccess.Read);
             try
             {
@@ -227,7 +310,7 @@ namespace Peter_image_sorter
                                 while (i < GPSformats.Length && !dateFound)
                                 {
                                     toReturn = CameraTimestampToArray(tag.Description, GPSformats[i]);
-                                    dateFound = toReturn[0] == null ? false: true;
+                                    dateFound = toReturn.Day == null ? false: true;
                                     i++;
                                 }
                                 break;
@@ -236,7 +319,7 @@ namespace Peter_image_sorter
                             else if (tag.Name == "Date/Time Original" && !dateFound)
                             {
                                 toReturn = CameraTimestampToArray(tag.Description, "yyyy:MM:dd HH:mm:ss");
-                                dateFound = toReturn[0] == null ? false : true;                              
+                                dateFound = toReturn.Day == null ? false : true;                              
                             }
                             else if (tag.Name == "File Modified Date" && !dateFound)
                             {                       
@@ -252,9 +335,9 @@ namespace Peter_image_sorter
                                         PropertyItem propItem = myImage.GetPropertyItem(36867);
                                         dateTaken = r.Replace(Encoding.UTF8.GetString(propItem.Value), "-", 2);
                                         var DateArray = dateTaken.Split("-");
-                                        toReturn[0] = DateArray[2].Split(" ")[0];
-                                        toReturn[1] = DateArray[1];
-                                        toReturn[2] = DateArray[0];
+                                        toReturn.Day = DateArray[2].Split(" ")[0];
+                                        toReturn.Month = DateArray[1];
+                                        toReturn.Year= DateArray[0];
 
                                     } catch (Exception ex)
                                     {}
@@ -266,7 +349,7 @@ namespace Peter_image_sorter
                 else
                 {
                     Console.WriteLine("Only Images supported at this time");
-                    toReturn = GetVideoDateRecorded(imageLocation);
+                    toReturn = GetDateFromFileName(imageLocation);
                     //var directories = ImageMetadataReader.ReadMetadata(imageLocation);
                     //var fileDirectory = directories;
                     //foreach (var directory in directories)
@@ -294,16 +377,16 @@ namespace Peter_image_sorter
             return toReturn;
         }
 
-        public static string[] CameraTimestampToArray(string timeStamp, string format)
+        public static DateObject CameraTimestampToArray(string timeStamp, string format)
         {
-            var toReturn = new string[3];
+            var toReturn = new DateObject();
             CultureInfo provider = CultureInfo.InvariantCulture; 
             try
             {
                 var date = DateTime.ParseExact(timeStamp, format, provider);
-                toReturn[0] = date.Day.ToString("00");
-                toReturn[1] = date.Month.ToString();
-                toReturn[2] = date.Year.ToString();
+                toReturn.Day = date.Day.ToString("00");
+                toReturn.Month = date.Month.ToString();
+                toReturn.Year = date.Year.ToString();
             }
             catch (Exception e)
             {

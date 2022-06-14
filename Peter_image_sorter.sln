@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Peter_image_sorter", "Peter_image_sorter.csproj", "{27E5A8DC-25FD-4B82-AB2B-6A34676DA185}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Peter_image_sorter", "Peter_image_sorter.csproj", "{27E5A8DC-25FD-4B82-AB2B-6A34676DA185}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject1", "Test_project\TestProject1\TestProject1.csproj", "{88382A17-E4CD-4245-806C-7DB10920BDCB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{27E5A8DC-25FD-4B82-AB2B-6A34676DA185}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{27E5A8DC-25FD-4B82-AB2B-6A34676DA185}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{27E5A8DC-25FD-4B82-AB2B-6A34676DA185}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88382A17-E4CD-4245-806C-7DB10920BDCB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88382A17-E4CD-4245-806C-7DB10920BDCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88382A17-E4CD-4245-806C-7DB10920BDCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88382A17-E4CD-4245-806C-7DB10920BDCB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
